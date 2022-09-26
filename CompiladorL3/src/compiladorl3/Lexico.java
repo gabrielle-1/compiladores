@@ -14,6 +14,8 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.String.valueOf;
+
 /**
  *
  * @author tarci
@@ -110,8 +112,14 @@ public class Lexico {
                         estado = 99;
                         this.back();
                     }else{
-                        lexema.append(c);
-                        throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
+                        String characterString = valueOf(c);
+
+                        if(characterString.equals("'")){
+                            lexema.append(c);
+                            estado = 11;
+                        }else{
+                            throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
+                        }
                     }
                     break;
                 case 1:
@@ -168,15 +176,14 @@ public class Lexico {
                     }
                     break;
                 case 8:
+                    estado = 10;
                     if(c == '=' || c == '>'){
                         lexema.append(c);
                         estado = 10;
-                    }else{
-                        this.back();
-                        return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL);
                     }
                     break;
                 case 9:
+                    estado = 10;
                     if(c == '='){
                         lexema.append(c);
                         estado = 10;
@@ -185,6 +192,24 @@ public class Lexico {
                 case 10:
                     this.back();
                     return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL);
+                case 11:
+                    if(isLetra(c) || isDigito(c)){
+                        lexema.append(c);
+                        estado = 12;
+                    }
+                    break;
+                case 12:
+                    String characterString = valueOf(c);
+                    if(characterString.equals("'")){
+                        lexema.append(c);
+                        estado = 13;
+                    }else{
+                        this.back();
+                        throw new RuntimeException("Erro: char inválido \"" + lexema.toString() + "\"");
+                    }
+                case 13:
+                    this.back();
+                    return new Token(lexema.toString(), Token.TIPO_CHAR);
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO);
             }
