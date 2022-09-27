@@ -73,8 +73,13 @@ public class Lexico {
                 case 0:
                     if(c == ' ' || c == '\t' || c == '\n' || c == '\r' ){ //caracteres de espaço em branco ASCII tradicionais 
                         estado = 0;
-                    }
-                    else if(this.isLetra(c) || c == '_'){
+                    }else if(c == 'i'){
+                      lexema.append(c);
+                      estado = 14;
+                    }else if(c=='e'){
+                      lexema.append(c);
+                      estado = 16;
+                    }else if(this.isLetra(c) || c == '_'){
                         lexema.append(c);
                         estado = 1;
                     }
@@ -118,6 +123,7 @@ public class Lexico {
                             lexema.append(c);
                             estado = 11;
                         }else{
+                          lexema.append(c);
                             throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
                         }
                     }
@@ -196,24 +202,87 @@ public class Lexico {
                     if(isLetra(c) || isDigito(c)){
                         lexema.append(c);
                         estado = 12;
+                    }else{
+                      lexema.append(c);
+                      throw new RuntimeException("Erro: char inválido \"" + lexema.toString() + "\"");
                     }
                     break;
                 case 12:
                     String characterString = valueOf(c);
                     if(characterString.equals("'")){
                         lexema.append(c);
-                        estado = 13;
+                        return new Token(lexema.toString(), Token.TIPO_CHAR);
                     }else{
-                        this.back();
+                      lexema.append(c);
                         throw new RuntimeException("Erro: char inválido \"" + lexema.toString() + "\"");
                     }
-                case 13:
-                    this.back();
-                    return new Token(lexema.toString(), Token.TIPO_CHAR);
+                case 14:
+                  if(c=='n'){
+                    lexema.append(c);
+                    estado = 15;
+                  }else if(c=='f'){
+                    lexema.append(c);
+                     return new Token(lexema.toString(), Token.TIPO_PALAVRA_RESERVADA);
+                  }else if(this.isLetra(c) || this.isDigito(c) || c == '_'){
+                    lexema.append(c);
+                    estado = 1;
+                  }else{
+                    lexema.append(c);
+                    throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
+                  }
+                break;
+              case 15:
+                if(c=='t'){
+                  lexema.append(c);
+                  return new Token(lexema.toString(), Token.TIPO_PALAVRA_RESERVADA);
+                }else if(this.isLetra(c) || this.isDigito(c) || c == '_' || c == ' '){
+                    lexema.append(c);
+                    estado = 1;
+                }else{
+                    lexema.append(c);
+                    throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
+                }
+                break;
+                case 16:
+                  if(c=='l'){
+                    lexema.append(c);
+                    estado = 17;
+                  }else if(this.isLetra(c) || this.isDigito(c) || c == '_'){
+                    lexema.append(c);
+                    estado = 1;
+                  }else{
+                    lexema.append(c);
+                    throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
+                  }
+                 break;
+                case 17:
+                 if(c=='s'){
+                    lexema.append(c);
+                    estado = 18;
+                  }else if(this.isLetra(c) || this.isDigito(c) || c == '_'){
+                    lexema.append(c);
+                    estado = 1;
+                  }else{
+                    lexema.append(c);
+                    throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
+                  }
+                break;
+                case 18:
+                 if(c=='e'){
+                    lexema.append(c);
+                    return new Token(lexema.toString(), Token.TIPO_PALAVRA_RESERVADA);
+                  }else if(this.isLetra(c) || this.isDigito(c) || c == '_'){
+                    lexema.append(c);
+                    estado = 1;
+                  }else{
+                    lexema.append(c);
+                    throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
+                  }
+                 break;
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO);
             }
         }                
         return token;
-    }   
+    } 
 }
