@@ -203,7 +203,6 @@ public class Lexico {
               lexema.append(c);
               estado = 10;
             }
-            this.back();
             break;
           case 10:
             this.back();
