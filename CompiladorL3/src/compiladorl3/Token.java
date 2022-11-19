@@ -21,6 +21,7 @@ public class Token {
     public static int TIPO_PALAVRA_RESERVADA = 7;
 
     public static int TIPO_OPERADOR_ATRIBUICAO = 8;
+  public static int TIPO_OPERADOR_ELSE = 9;
 
     public static int TIPO_FIM_CODIGO = 99;
     
@@ -62,6 +63,8 @@ public class Token {
                 return this.lexema + " - PALAVRA_RESERVADA";
             case 8:
                 return this.lexema + " - OPERADOR_ATRIBUICAO";
+            case 9:
+                return this.lexema + " - OPERADOR_ELSE";
             case 99:
                 return this.lexema + " - FIM_CODIGO";    
         }
