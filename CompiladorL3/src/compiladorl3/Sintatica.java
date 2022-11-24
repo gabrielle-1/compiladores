@@ -36,7 +36,8 @@ public class Sintatica {
             this.token = this.lexico.nextToken();
             this.bloco();
           } else {
-            throw new RuntimeException("jumente, na inicialização era para fechar parênteses com ) não " + this.token.getLexema());
+            throw new RuntimeException(
+                "jumente, na inicialização era para fechar parênteses com ) não " + this.token.getLexema());
           }
         } else {
           throw new RuntimeException("jumente, na inicialização era para ser ( não " + this.token.getLexema());
@@ -47,7 +48,6 @@ public class Sintatica {
     } else {
       throw new RuntimeException("jumente, na inicialização era para ser int não " + this.token.getLexema());
     }
-
   }
 
   private void declaracao() {
@@ -124,7 +124,7 @@ public class Sintatica {
 
   private void comando() {
     if (this.token.getLexema().equals("if")) {
-
+      // Bloco if
       this.token = this.lexico.nextToken();
       if (this.token.getLexema().equals("(")) {
         this.token = this.lexico.nextToken();
@@ -136,6 +136,7 @@ public class Sintatica {
             this.token = this.lexico.nextToken();
             this.comando();
             if (this.token.getLexema().equals("else")) {
+              // Bloco else
               this.token = this.lexico.nextToken();
               this.comando();
               if (this.token.getLexema().equals("?")) {
@@ -207,7 +208,7 @@ public class Sintatica {
     } else if (this.token.getLexema().equals("?")) {
 
     } else {
-      throw new RuntimeException("jumente, que comando é começa com = " + this.token.getLexema());
+      throw new RuntimeException("jumente, que comando é esse que começa com = " + this.token.getLexema() + " ? ");
     }
   }
 
@@ -222,16 +223,16 @@ public class Sintatica {
   private void Char() {
     if (this.token.getTipo() == Token.TIPO_CHAR || (this.token.getTipo() == Token.TIPO_IDENTIFICADOR
         && this.findId(this.token.getLexema()) != null)) {
-      
+
       if (this.token.getTipo() == Token.TIPO_CHAR || (this.token.getTipo() == Token.TIPO_IDENTIFICADOR
-        && this.findId(this.token.getLexema()).tipo == Token.TIPO_CHAR)) {
-      this.token = this.lexico.nextToken();
+          && this.findId(this.token.getLexema()).tipo == Token.TIPO_CHAR)) {
+        this.token = this.lexico.nextToken();
       } else {
-      throw new RuntimeException("Era pra o identificador ser char");
+        throw new RuntimeException("Era pra o identificador ser char");
       }
-      
+
     } else {
-      throw new RuntimeException("Era pra ser char");
+      throw new RuntimeException("Jumente, não se pode atribuir " + this.token.getLexema() + " para um char.");
     }
   }
 
@@ -250,7 +251,7 @@ public class Sintatica {
         throw new RuntimeException("Era pra o identificador ser float ou inteiro");
       }
     } else {
-      throw new RuntimeException("Era pra ser inteiro ou float");
+      throw new RuntimeException("Jumente, não se pode atribuir " + this.token.getLexema() + " para um float.");
     }
   }
 
@@ -263,15 +264,20 @@ public class Sintatica {
   }
 
   private void TI() {
-    if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR&&(this.findId(this.token.getLexema()) != null)) ||
+    if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR &&
+        (this.findId(this.token.getLexema()) != null)) ||
         this.token.getTipo() == Token.TIPO_INTEIRO) {
-      if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR&&(this.findId(this.token.getLexema()).tipo == Token.TIPO_INTEIRO))||  this.token.getTipo() == Token.TIPO_INTEIRO) {
-      this.token = this.lexico.nextToken();
-      }else{
-        throw new RuntimeException("Era pra o identificador ser inteiro");
+
+      if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR &&
+          (this.findId(this.token.getLexema()).tipo == Token.TIPO_INTEIRO)) ||
+          this.token.getTipo() == Token.TIPO_INTEIRO) {
+        this.token = this.lexico.nextToken();
+      } else {
+        throw new RuntimeException("Era pra o identificador ser do tipo inteiro");
       }
     } else {
-      throw new RuntimeException("Era pra ser inteiro ");
+      throw new RuntimeException(
+          "Jumente, não se pode atribuir " + this.token.getLexema() + " para um inteiro.");
     }
   }
 
